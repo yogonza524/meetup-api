@@ -1,0 +1,3 @@
+weather-service:
+  host: ${WEATHER_HOST}
+  port: ${WEATHER_PORT}

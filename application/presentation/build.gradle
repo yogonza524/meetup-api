@@ -1,0 +1,68 @@
+buildscript {
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.2.4.RELEASE'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply from: "${project.rootDir}/gradle/config.gradle"
+
+ext {
+    set('moduleName', 'com.meetup.api.presentation')
+}
+
+dependencies {
+    compile project(':domain')
+    compile project(':business')
+    compile project(':weather')
+    implementation(
+            'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-aop',
+            'org.springframework.boot:spring-boot-starter-actuator',
+            'org.springframework.boot:spring-boot-starter-data-jpa',
+    )
+    runtimeOnly 'com.h2database:h2'
+
+    compile 'org.springdoc:springdoc-openapi-ui:1.4.4'
+    compile 'org.aspectj:aspectjweaver'
+
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.tngtech.archunit:archunit:0.14.1'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.meetup.api.presentation.AppBootstrap"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+sourceSets {
+    archTest {
+        java {
+            compileClasspath += main.runtimeClasspath + test.runtimeClasspath
+            runtimeClasspath += main.runtimeClasspath + test.runtimeClasspath
+        }
+    }
+
+    task archTest(type: Test) {
+        description = 'Runs the architecture tests.'
+        group = 'verification'
+
+        testClassesDirs = sourceSets.archTest.output.classesDirs
+        classpath = sourceSets.archTest.runtimeClasspath
+    }
+}

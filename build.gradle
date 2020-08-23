@@ -1,0 +1,207 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath 'org.owasp:dependency-check-gradle:5.3.0'
+		classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.5.1'
+		classpath 'com.github.sherter.google-java-format:com.github.sherter.google-java-format.gradle.plugin:0.8'
+		classpath 'com.google.cloud.tools.jib:com.google.cloud.tools.jib.gradle.plugin:2.4.0'
+	}
+}
+
+// General config only for this build file
+apply from: 'gradle/config.gradle'
+
+allprojects {
+	apply plugin: 'idea'
+	apply plugin: 'pmd'
+
+	tasks.withType(Test) {
+		useJUnitPlatform()
+		jvmArgs '--enable-preview'
+	}
+}
+
+configure(subprojects.findAll {it.name == 'presentation'}) {
+	apply plugin: 'com.google.cloud.tools.jib'
+
+	jib {
+		from{
+			image = "${dockerImageFrom}"
+		}
+		to {
+			image = "${dockerImageTo}"
+		}
+		container {
+			jvmFlags = ['-Xms512m', '-Xdebug', '-server', '-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}']
+			mainClass = 'com.meetup.api.presentation.AppBootstrap'
+			args = []
+			ports = ['8080/tcp']
+			environment = [
+					SPRING_PROFILES_ACTIVE : System.getenv('SPRING_PROFILES_ACTIVE') ?
+							System.getenv('SPRING_PROFILES_ACTIVE')
+							: 'dev'
+			]
+		}
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'org.owasp.dependencycheck'
+	apply plugin: 'info.solidsoft.pitest'
+	apply plugin: 'com.github.sherter.google-java-format'
+
+	sourceCompatibility = '11'
+
+	sourceSets {
+		integrationTest {
+			java {
+				compileClasspath += main.runtimeClasspath + test.runtimeClasspath
+				runtimeClasspath += main.runtimeClasspath + test.runtimeClasspath
+			}
+		}
+		contractTest {
+			java {
+				compileClasspath += main.runtimeClasspath + test.runtimeClasspath
+				runtimeClasspath += main.runtimeClasspath + test.runtimeClasspath
+			}
+		}
+		unitTest {
+			java {
+				srcDir 'src/unitTest/java'
+				compileClasspath += main.runtimeClasspath + test.runtimeClasspath
+				runtimeClasspath += main.runtimeClasspath + test.runtimeClasspath
+			}
+		}
+	}
+
+	tasks.withType(Test){
+		testLogging {
+			exceptionFormat "full"
+			events "passed", "failed", "skipped"
+		}
+	}
+
+	pitest {
+		testPlugin = "junit5"
+		targetClasses = ['com.meetup.api.*']
+		mainSourceSets = [sourceSets.main]
+		testSourceSets = [sourceSets.test, sourceSets.integrationTest]
+		excludedClasses = [
+				'com.meetup.api.presentation.AppBootstrap',
+				'com.meetup.api.domain.*',
+				'com.meetup.api.infrastructure.persistence.configuration.FlywayMigrationConfiguration'
+		]
+		outputFormats = ['XML', 'HTML']
+		timestampedReports = false
+		failWhenNoMutations = false
+		threads = 12
+		verbose = true
+		coverageThreshold = 90
+		mutationThreshold = 70
+		mutators = ['CONDITIONALS_BOUNDARY',
+					'INCREMENTS',
+					'INVERT_NEGS',
+					'MATH',
+					'NEGATE_CONDITIONALS',
+					'RETURN_VALS',
+					'VOID_METHOD_CALLS',
+					'INLINE_CONSTS',
+					'REMOVE_CONDITIONALS',
+					'EMPTY_RETURNS',
+					'FALSE_RETURNS',
+					'TRUE_RETURNS',
+					'NULL_RETURNS',
+					'PRIMITIVE_RETURNS']
+	}
+	buildscript {
+		repositories {
+			mavenCentral()
+		}
+	}
+
+	group = 'com.meetup.api'
+	version = '0.0.1-SNAPSHOT'
+
+	sourceCompatibility = JavaVersion.VERSION_11
+	targetCompatibility = JavaVersion.VERSION_11
+
+	repositories {
+		mavenCentral()
+	}
+
+	task integrationTest(type: Test) {
+		description = 'Runs the integration tests.'
+		group = 'verification'
+
+		testClassesDirs = sourceSets.integrationTest.output.classesDirs
+		classpath = sourceSets.integrationTest.runtimeClasspath
+	}
+
+	task contractTest(type: Test) {
+		description = 'Runs the contract tests.'
+		group = 'verification'
+
+		testClassesDirs = sourceSets.contractTest.output.classesDirs
+		classpath = sourceSets.contractTest.runtimeClasspath
+	}
+
+	task unitTest(type: Test) {
+		description = 'Runs the unit tests.'
+		group = 'verification'
+
+		testClassesDirs = sourceSets.unitTest.output.classesDirs
+		classpath = sourceSets.unitTest.runtimeClasspath
+	}
+
+	idea {
+		module {
+			testSourceDirs += file('src/integrationTest/java')
+			testSourceDirs += file('src/integrationTest/resources')
+			testSourceDirs += file('src/contractTest/java')
+			testSourceDirs += file('src/contractTest/resources')
+			testSourceDirs += file('src/archTest/java')
+			testSourceDirs += file('src/archTest/resources')
+			testSourceDirs += file('src/unitTest/java')
+			testSourceDirs += file('src/unitTest/resources')
+		}
+	}
+
+	pmd {
+		ignoreFailures = false
+		sourceSets = [sourceSets.main]
+		ruleSets = ["java-quickstart"]
+	}
+
+	dependencies {
+//		testImplementation (
+//				'org.hamcrest:hamcrest:2.2',
+//				'com.github.tomakehurst:wiremock:2.25.1'
+//		)
+		testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
+		testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+		testImplementation 'org.mockito:mockito-core:3.2.4'
+		compile 'org.pitest:pitest-junit5-plugin:0.12'
+
+	}
+	afterEvaluate {
+		repositories {
+			mavenCentral()
+		}
+
+		compileJava {
+			inputs.property('moduleName', moduleName)
+			doFirst {
+				options.compilerArgs = [
+						'--module-path', classpath.asPath,
+				]
+				classpath = files()
+			}
+		}
+	}
+}

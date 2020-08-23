@@ -1,0 +1,7 @@
+ext {
+    mainClass = 'com.meetup.api.presentation.AppBootstrap'
+
+    // Docker
+    dockerImageFrom = 'openjdk:11.0.4-jdk-slim'
+    dockerImageTo = 'santander/meetup-api:1.2'
+}

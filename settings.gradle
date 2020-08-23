@@ -1,0 +1,11 @@
+rootProject.name = 'meetup-api'
+
+include ':presentation'
+include ':domain'
+include ':weather'
+include ':business'
+
+project(':presentation').projectDir = file('application/presentation')
+project(':domain').projectDir = file('application/domain')
+project(':weather').projectDir = file('application/infrastructure/weather')
+project(':business').projectDir = file('application/business')

@@ -1,0 +1,16 @@
+weather-mock:
+  build: .
+  dockerfile: weather-api-mock/docker/Dockerfile
+  ports:
+    - "8087:8080"
+
+meetup-api:
+  image: santander/meetup-api:1.2
+  ports:
+    - "8080:8080"
+  environment:
+    - SPRING_PROFILES_ACTIVE=docker
+    - WEATHER_HOST=http://weather-mock
+    - WEATHER_PORT=8080
+  links:
+    - weather-mock

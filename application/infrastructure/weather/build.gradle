@@ -1,0 +1,8 @@
+apply plugin: 'java-library'
+
+ext.moduleName = 'com.meetup.api.infrastructure.weather'
+
+dependencies {
+    compile project(":business")
+    compile 'com.google.code.gson:gson:2.8.6'
+}

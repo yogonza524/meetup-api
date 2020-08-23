@@ -1,0 +1,2 @@
+springdoc:
+  packagesToScan: com.meetup.api.presentation.port.controller
