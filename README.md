@@ -1,4 +1,4 @@
-#Santander Tecnologia Challenge
+# Santander Tecnologia Challenge
 En Santander Tecnología queremos armar las mejores meetups y para eso planteamos hacer una app que nos ayude a lograr que no falte lo fundamental...¡Birras!
 
 ## ¿Cual es el problema?
