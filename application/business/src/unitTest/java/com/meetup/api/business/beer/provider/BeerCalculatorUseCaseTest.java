@@ -1,14 +1,14 @@
-package com.meetup.api.business.beerProvider;
+package com.meetup.api.business.beer.provider;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
+import com.meetup.api.business.beer.provider.domain.BoxBeerToPurchase;
 import com.meetup.api.business.weather.WeatherService;
 import com.meetup.api.domain.weather.Temperature;
 import java.io.IOException;
-import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -34,7 +34,11 @@ class BeerCalculatorUseCaseTest {
 
     when(beerProviderService.calculateBeersFor(anyInt(), any())).thenReturn(2L);
 
-    Long purchased = beerCalculatorUseCase.calculateBeersFor(10, "Chaco", new Date());
-    assertEquals(2L, purchased);
+    BoxBeerToPurchase purchased =
+        beerCalculatorUseCase.calculateBeersFor(10, "Chaco", "2020-08-31");
+    assertNotNull(purchased);
+    assertNotNull(purchased.getPurchased());
+    assertNotNull(purchased.getTemperature());
+    assertEquals(2L, purchased.getPurchased());
   }
 }

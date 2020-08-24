@@ -1,4 +1,4 @@
-package com.meetup.api.business.beerProvider;
+package com.meetup.api.business.beer.provider;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,5 +1,6 @@
 package com.meetup.api.domain.weather;
 
+@SuppressWarnings("PMD")
 public final class Temperature {
   private final Double CelciusValue;
   private final String City;
@@ -26,8 +27,12 @@ public final class Temperature {
   public TemperatureRange getRange() {
     final int value = this.CelciusValue.intValue();
 
-    if (value < 20) return TemperatureRange.LESS_THAN_20_CELCIUS;
-    if (value > 24) return TemperatureRange.MORE_THAN_24_CELCIUS;
+    if (value < 20) {
+      return TemperatureRange.LESS_THAN_20_CELCIUS;
+    }
+    if (value > 24) {
+      return TemperatureRange.MORE_THAN_24_CELCIUS;
+    }
 
     return TemperatureRange.BETWEEN_20_AND_24_CELCIUS;
   }

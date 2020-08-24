@@ -15,4 +15,24 @@ public class Assistant {
     this.email = email;
     this.mobile = mobile;
   }
+
+  public String getUuid() {
+    return uuid;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public String getMobile() {
+    return mobile;
+  }
 }

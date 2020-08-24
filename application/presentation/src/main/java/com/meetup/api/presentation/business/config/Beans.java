@@ -1,8 +1,8 @@
 package com.meetup.api.presentation.business.config;
 
-import com.meetup.api.business.beerProvider.BeerCalculatorUseCase;
-import com.meetup.api.business.beerProvider.BeerProviderService;
-import com.meetup.api.business.beerProvider.SimpleBeerProviderService;
+import com.meetup.api.business.beer.provider.BeerCalculatorUseCase;
+import com.meetup.api.business.beer.provider.BeerProviderService;
+import com.meetup.api.business.beer.provider.SimpleBeerProviderService;
 import com.meetup.api.business.weather.WeatherService;
 import com.meetup.api.infrastructure.connector.port.LocalWeatherConnector;
 import org.springframework.beans.factory.annotation.Value;

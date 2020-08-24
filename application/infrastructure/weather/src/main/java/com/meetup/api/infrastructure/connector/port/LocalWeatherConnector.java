@@ -15,9 +15,9 @@ public class LocalWeatherConnector implements WeatherService {
   private final Gson gson = new Gson();
   private final String host;
   private final int port;
-  private final String endpoint = "/weather";
+  private static final String ENDPOINT = "/weather";
 
-  private final String SLASH = "/";
+  private static final String SLASH = "/";
 
   public LocalWeatherConnector(String host, int port) {
     this.host = host;
@@ -35,7 +35,7 @@ public class LocalWeatherConnector implements WeatherService {
             .append(host)
             .append(":")
             .append(port)
-            .append(endpoint)
+            .append(ENDPOINT)
             .append(SLASH)
             .append(city)
             .append(SLASH)

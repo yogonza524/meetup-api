@@ -1,6 +1,6 @@
-package com.meetup.api.business.beerProvider;
+package com.meetup.api.business.beer.provider;
 
-import com.meetup.api.business.beerProvider.domain.BoxBeerToPurchase;
+import com.meetup.api.business.beer.provider.domain.BoxBeerToPurchase;
 import com.meetup.api.business.weather.WeatherService;
 import com.meetup.api.domain.weather.Temperature;
 import java.io.IOException;

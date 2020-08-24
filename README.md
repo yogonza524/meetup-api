@@ -50,3 +50,48 @@ https://rapidapi.com/stefan.skilarov/api/AccuWeather
 
 https://rapidapi.com/darskyapis/api/dark-sky
 
+# Propuesta
+
+Desarrollo de un ecosistema de microservicios ubicados para resolver el problema separadamente.
+
+##  Stack
+1. Java 11
+2. Docker & Docker Compose
+3. Make
+4. Golang
+
+## Comandos
+1. Ejecutar la aplicación (linkeada via Docker)
+```bash
+make run
+```
+2. Parar la aplicación (y sus miscelaneos)
+```bash
+make stop
+```
+3. Formatear uando Google Formater
+```bash
+make format
+```
+
+4. Ejecutar tests unitarios
+```bash
+make unitTest
+```
+
+5. Ejecutar tests de ḿutación
+```bash
+make mutationTest
+```
+
+## Contexto
+```bash
+http://localhost:8080
+```
+
+
+## Swagger
+```bash
+http://localhost:8080/swagger-ui.html
+```
+![Swagger](./swagger-ui.png)

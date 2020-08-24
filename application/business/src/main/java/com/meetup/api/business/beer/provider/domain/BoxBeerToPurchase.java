@@ -1,4 +1,4 @@
-package com.meetup.api.business.beerProvider.domain;
+package com.meetup.api.business.beer.provider.domain;
 
 import com.meetup.api.domain.weather.Temperature;
 import java.io.Serializable;

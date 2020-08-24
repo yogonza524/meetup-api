@@ -14,17 +14,19 @@ public class TraceConfiguration {
   private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   @Before(
-      "execution(* com.meetup.api.business.beerProvider.BeerCalculatorUseCase.calculateBeersFor(..)) && args(assistants,where,when,..)")
+      "execution(* com.meetup.api.business.beer.provider.BeerCalculatorUseCase.calculateBeersFor(..)) && args(assistants,where,when,..)")
   public void beforeCalculateBeersFor(
       JoinPoint joinPoint, int assistants, String where, String when) {
     // Advice
-    logger.info(
-        "action=calculateBeersFor, assistants="
-            + assistants
-            + ", where="
-            + where
-            + ", when="
-            + when);
+    if (logger.isInfoEnabled()) {
+      logger.info(
+          "action=calculateBeersFor, assistants="
+              + assistants
+              + ", where="
+              + where
+              + ", when="
+              + when);
+    }
   }
 
   @Before(
@@ -32,13 +34,15 @@ public class TraceConfiguration {
   public void beforeRestBeerCalculate(
       JoinPoint joinPoint, int assistants, String where, String date) {
     // Advice
-    logger.info(
-        "action=beerCalculateRest, assistants="
-            + assistants
-            + ", where="
-            + where
-            + ", when="
-            + date);
+    if (logger.isInfoEnabled()) {
+      logger.info(
+          "action=beerCalculateRest, assistants="
+              + assistants
+              + ", where="
+              + where
+              + ", when="
+              + date);
+    }
   }
 
   @Before(
@@ -46,7 +50,8 @@ public class TraceConfiguration {
   public void beforeBadRequestException(
       JoinPoint joinPoint, HttpServletRequest request, Exception ex) {
     // Advice
-    logger.info("action=handleGenericExceptions, exception="
-            + ex.getLocalizedMessage());
+    if (logger.isInfoEnabled()) {
+      logger.info("action=handleGenericExceptions, exception=" + ex.getLocalizedMessage());
+    }
   }
 }

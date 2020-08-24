@@ -54,6 +54,7 @@ subprojects {
 	apply plugin: 'java'
 	apply plugin: 'org.owasp.dependencycheck'
 	apply plugin: 'info.solidsoft.pitest'
+	apply plugin: 'jacoco'
 	apply plugin: 'com.github.sherter.google-java-format'
 
 	sourceCompatibility = '11'
@@ -87,15 +88,27 @@ subprojects {
 		}
 	}
 
+	jacocoTestCoverageVerification {
+		violationRules {
+			rule {
+				limit {
+					counter = 'LINE'
+					value = 'COVEREDRATIO'
+					minimum = 0.7
+				}
+			}
+		}
+	}
+
 	pitest {
 		testPlugin = "junit5"
 		targetClasses = ['com.meetup.api.*']
 		mainSourceSets = [sourceSets.main]
-		testSourceSets = [sourceSets.test, sourceSets.integrationTest]
+		testSourceSets = [sourceSets.unitTest, sourceSets.integrationTest]
 		excludedClasses = [
 				'com.meetup.api.presentation.AppBootstrap',
 				'com.meetup.api.domain.*',
-				'com.meetup.api.infrastructure.persistence.configuration.FlywayMigrationConfiguration'
+				'com.meetup.api.presentation.business.config.*'
 		]
 		outputFormats = ['XML', 'HTML']
 		timestampedReports = false

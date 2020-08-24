@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @ControllerAdvice(annotations = {RestController.class})
 public class RestControllerAdvice {
 
-  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler({
     HttpMessageNotReadableException.class,
     MethodArgumentNotValidException.class,
@@ -28,7 +28,7 @@ public class RestControllerAdvice {
         .body(Collections.singletonMap("msg", ex.getLocalizedMessage()));
   }
 
-  @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler({Exception.class})
   protected ResponseEntity<Map<String, Object>> handleGenericExceptions(
       HttpServletRequest request, Exception ex) {

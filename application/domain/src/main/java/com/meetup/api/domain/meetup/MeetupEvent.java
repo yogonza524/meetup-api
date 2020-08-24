@@ -56,8 +56,6 @@ public final class MeetupEvent {
     private List<Assistant> assistants = new ArrayList<>();
     private Long totalOfBeers;
 
-    public Builder() {}
-
     public Builder when(Date when) {
       this.when = when;
       return this;

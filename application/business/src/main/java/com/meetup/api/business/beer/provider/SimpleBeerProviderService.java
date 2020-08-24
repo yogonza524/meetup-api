@@ -1,4 +1,4 @@
-package com.meetup.api.business.beerProvider;
+package com.meetup.api.business.beer.provider;
 
 import com.meetup.api.domain.beer.consume.BeerFactorPerAssistant;
 import com.meetup.api.domain.beer.provider.BeerBoxSelled;
