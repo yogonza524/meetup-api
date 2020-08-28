@@ -28,10 +28,7 @@ dependencies {
     compile 'org.springdoc:springdoc-openapi-ui:1.4.4'
     compile 'org.aspectj:aspectjweaver'
 
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
     testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
-
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.tngtech.archunit:archunit:0.14.1'
 }

@@ -1,5 +1,6 @@
 package com.meetup.api.presentation.port.controller.exceptions;
 
+import com.meetup.api.business.weather.exceptions.WeatherConnectionException;
 import java.util.Collections;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,14 @@ public class RestControllerAdvice {
   protected ResponseEntity<Map<String, Object>> handleGenericExceptions(
       HttpServletRequest request, Exception ex) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(Collections.singletonMap("msg", ex.getLocalizedMessage()));
+  }
+
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler({WeatherConnectionException.class})
+  public ResponseEntity<Map<String, Object>> handleWeatherConnectionExceptions(
+      HttpServletRequest request, Exception ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .body(Collections.singletonMap("msg", ex.getLocalizedMessage()));
   }
 }

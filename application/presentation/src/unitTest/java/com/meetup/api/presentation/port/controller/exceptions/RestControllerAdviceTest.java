@@ -38,4 +38,12 @@ class RestControllerAdviceTest {
     var response = restControllerAdvice.handleGenericExceptions(request, ex);
     assertNotNull(response);
   }
+
+  @Test
+  void handleWeatherConnectionExceptions() {
+    when(ex.getLocalizedMessage()).thenReturn("Invalid parameter");
+
+    var response = restControllerAdvice.handleWeatherConnectionExceptions(request, ex);
+    assertNotNull(response);
+  }
 }

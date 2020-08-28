@@ -1,5 +1,6 @@
 package com.meetup.api.presentation.port.trace;
 
+import com.meetup.api.business.weather.exceptions.WeatherConnectionException;
 import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -50,8 +51,28 @@ public class TraceConfiguration {
   public void beforeBadRequestException(
       JoinPoint joinPoint, HttpServletRequest request, Exception ex) {
     // Advice
-    if (logger.isInfoEnabled()) {
-      logger.info("action=handleGenericExceptions, exception=" + ex.getLocalizedMessage());
+    if (logger.isWarnEnabled()) {
+      logger.warn("action=handleGenericExceptions, exception=" + ex.getLocalizedMessage());
+    }
+  }
+
+  @Before(
+      "execution(* com.meetup.api.presentation.port.controller.exceptions.RestControllerAdvice.handleWeatherConnectionExceptions(..)) && args(request,ex,..)")
+  public void beforeHandleWeatherConnectionExceptions(
+      JoinPoint joinPoint, HttpServletRequest request, Exception ex) {
+    // Advice
+    if (logger.isErrorEnabled()) {
+      if (ex instanceof WeatherConnectionException) {
+        String cause = ((WeatherConnectionException) ex).getSource().getLocalizedMessage();
+        logger.error(
+            "action=handleWeatherConnectionExceptions, exception="
+                + ex.getLocalizedMessage()
+                + ", source="
+                + cause);
+      } else {
+        logger.error(
+            "action=handleWeatherConnectionExceptions, exception=" + ex.getLocalizedMessage());
+      }
     }
   }
 }

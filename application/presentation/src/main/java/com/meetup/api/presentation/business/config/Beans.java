@@ -4,7 +4,7 @@ import com.meetup.api.business.beer.provider.BeerCalculatorUseCase;
 import com.meetup.api.business.beer.provider.BeerProviderService;
 import com.meetup.api.business.beer.provider.SimpleBeerProviderService;
 import com.meetup.api.business.weather.WeatherService;
-import com.meetup.api.infrastructure.connector.port.LocalWeatherConnector;
+import com.meetup.api.infrastructure.connector.business.service.LocalWeatherService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class Beans {
 
   @Bean
   WeatherService weatherService() {
-    return new LocalWeatherConnector(weatherHost, weatherPort);
+    return new LocalWeatherService(weatherHost, weatherPort);
   }
 
   @Bean

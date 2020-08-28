@@ -1,8 +1,12 @@
 apply plugin: 'java-library'
 
 ext.moduleName = 'com.meetup.api.infrastructure.weather'
+ext.resilience4jVersion = '1.5.0'
 
 dependencies {
     compile project(":business")
     compile 'com.google.code.gson:gson:2.8.6'
+    compile "io.github.resilience4j:resilience4j-circuitbreaker:${resilience4jVersion}"
+    compile "io.github.resilience4j:resilience4j-timelimiter:${resilience4jVersion}"
+
 }

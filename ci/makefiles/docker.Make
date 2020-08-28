@@ -7,7 +7,7 @@ clean:
 format:
 	./ci/scripts/gradle-launcher.sh goJF clean
 
-run:
+runLocal:
 	./ci/scripts/gradle-launcher.sh bootRun
 
 dockerBuild:
